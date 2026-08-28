@@ -18,6 +18,7 @@ export interface RaceResult {
   selectedHorsePopularityPercent?: number | null;
   selectedHorseProfitBonusPercent?: number | null;
   selectedHorsePayoutMultiplier?: number | null;
+  photoFinish?: boolean;
 }
 
 export interface GameState {

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { AppLanguage } from "../model/AppLanguage";
 import { BetType, PlayerBet, HorsePayoutInfo, calculateBetPayout, calculateBetPayoutInfo } from "../model/BettingLogic";
-import { Horse, RACE_ENTRANT_COUNT, STANDBY_HORSE_COUNT, TOTAL_HORSE_COUNT, weatherBiasMultiplier } from "../model/Horse";
+import { Horse, RACE_ENTRANT_COUNT, STANDBY_HORSE_COUNT, TOTAL_HORSE_COUNT, weatherBiasMultiplier, weatherAffinityForHorse } from "../model/Horse";
 import { RaceCourse } from "../model/RaceCourse";
 import { Weather as WeatherEnum } from "../model/Weather";
 import { BotPlayer } from "../model/BettingLogic";
@@ -91,6 +91,7 @@ export function BettingScreen({ sheep, language, horses, weather, raceCourse, bo
           const weatherPercent = Math.round((weatherMul - 1) * 100);
           const weatherPercentText = weatherPercent >= 0 ? `+${weatherPercent}%` : `${weatherPercent}%`;
           const weatherColor = weatherPercent > 0 ? "#2E7D32" : weatherPercent < 0 ? "#C62828" : "#666";
+          const affinity = weatherAffinityForHorse(horse, weather);
 
           return (
             <div
@@ -121,7 +122,7 @@ export function BettingScreen({ sheep, language, horses, weather, raceCourse, bo
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 700 }}>{horse.name}</div>
                 <div style={{ fontSize: 12, color: "#666" }}>{strings.speedStamina("★".repeat(Math.min(5, Math.max(1, Math.floor(horse.speed / 0.6)))), "★".repeat(Math.min(5, Math.max(1, Math.floor(horse.stamina * 5)))) )}</div>
-                <div style={{ fontSize: 12, color: weatherColor }}>{strings.weatherEffect(weather, weatherPercentText)}</div>
+                <div style={{ fontSize: 12, color: weatherColor }}>{strings.weatherEffect(weather, weatherPercentText)} <span style={{ fontWeight: 800, marginLeft: 4, padding: "1px 6px", borderRadius: 999, background: affinity === "◎" ? "#E8F5E9" : affinity === "○" ? "#F1F8E9" : affinity === "×" ? "#FFEBEE" : "#f5f5f5", border: "1px solid #e0e0e0", color: affinity === "◎" ? "#2E7D32" : affinity === "×" ? "#C62828" : "#555" }}>{affinity}</span></div>
                 {payoutInfo && <div style={{ fontSize: 12, color: "#2E7D32" }}>{strings.popularityAndBonus(payoutInfo.popularityPercent, payoutInfo.profitBonusPercent)}</div>}
               </div>
               <div style={{ textAlign: "right", minWidth: 80 }}>

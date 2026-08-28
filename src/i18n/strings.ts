@@ -58,6 +58,15 @@ export interface AppStrings {
   courseDetail(course: RaceCourse): string;
   distanceLabel(distanceM: number): string;
   ovalTrackLabel(): string;
+  commentaryLeader(name: string): string;
+  commentarySurge(name: string): string;
+  commentaryBreakaway(name: string): string;
+  commentaryCloseBattle(): string;
+  commentaryFinish(name: string, rank: number): string;
+  commentaryLap(lap: number, total: number): string;
+  photoFinishLabel(): string;
+  mutedLabel(): string;
+  unmutedLabel(): string;
 }
 
 class JapaneseStrings implements AppStrings {
@@ -127,6 +136,15 @@ class JapaneseStrings implements AppStrings {
   courseDetail(course: RaceCourse) { return `${course.nameJa} (${course.venueJa})`; }
   distanceLabel(distanceM: number) { return `${distanceM}m`; }
   ovalTrackLabel() { return "楕円コース"; }
+  commentaryLeader(name: string) { return `${name}が先頭に！`; }
+  commentarySurge(name: string) { return `${name}がスパート！`; }
+  commentaryBreakaway(name: string) { return `${name}が抜け出した！`; }
+  commentaryCloseBattle() { return `大接戦！`; }
+  commentaryFinish(name: string, rank: number) { return `${name} ゴール！ ${rank}着`; }
+  commentaryLap(lap: number, total: number) { return `${lap}/${total}周`; }
+  photoFinishLabel() { return `📸 フォトフィニッシュ！`; }
+  mutedLabel() { return `🔇 ミュート中`; }
+  unmutedLabel() { return `🔊 サウンドON`; }
 }
 
 class EnglishStrings implements AppStrings {
@@ -196,6 +214,15 @@ class EnglishStrings implements AppStrings {
   courseDetail(course: RaceCourse) { return `${course.nameEn} (${course.venueEn})`; }
   distanceLabel(distanceM: number) { return `${distanceM}m`; }
   ovalTrackLabel() { return "Oval Track"; }
+  commentaryLeader(name: string) { return `${name} takes the lead!`; }
+  commentarySurge(name: string) { return `${name} surges!`; }
+  commentaryBreakaway(name: string) { return `${name} breaks away!`; }
+  commentaryCloseBattle() { return `It's a close battle!`; }
+  commentaryFinish(name: string, rank: number) { return `${name} finishes #${rank}!`; }
+  commentaryLap(lap: number, total: number) { return `Lap ${lap}/${total}`; }
+  photoFinishLabel() { return `📸 Photo Finish!`; }
+  mutedLabel() { return `🔇 Muted`; }
+  unmutedLabel() { return `🔊 Sound ON`; }
 }
 
 function weatherJa(w: Weather): string {

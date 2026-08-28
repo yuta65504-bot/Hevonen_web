@@ -39,6 +39,9 @@ export function ResultScreen({ sheep, language, raceResult, playerBet, horses, o
   return (
     <div style={{ minHeight: "100vh", padding: 24, display: "flex", flexDirection: "column", alignItems: "center", maxWidth: 720, margin: "0 auto", width: "100%" }}>
       <h1 style={{ fontSize: 28, fontWeight: 800, textAlign: "center" }}>{strings.resultTitle(raceResult.playerWon)}</h1>
+      {raceResult.photoFinish && (
+        <div style={{ marginTop: 8, background: "#FFF3E0", color: "#E65100", fontWeight: 800, fontSize: 14, padding: "6px 14px", borderRadius: 999, border: "1px solid #FFE0B2" }}>{strings.photoFinishLabel()}</div>
+      )}
 
       {winner && (
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>

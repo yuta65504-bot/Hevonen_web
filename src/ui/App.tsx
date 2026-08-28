@@ -11,6 +11,7 @@ import { TitleScreen } from "./TitleScreen";
 import { BettingScreen } from "./BettingScreen";
 import { RaceScreen } from "./RaceScreen";
 import { ResultScreen } from "./ResultScreen";
+import { MuteToggle } from "./MuteToggle";
 import { AppLanguage } from "../model/AppLanguage";
 import { GameState, RaceResult } from "../model/GameState";
 
@@ -25,17 +26,29 @@ export function App() {
     return () => soundPlayer.dispose();
   }, [soundPlayer]);
 
+  const [muteTick, setMuteTick] = useState(0);
+
   useEffect(() => {
     if (gameState.screen === Screen.RACE) soundPlayer.play(SoundEffect.RACE_START);
-    if (gameState.screen === Screen.RESULT && gameState.raceResult?.playerWon) soundPlayer.play(SoundEffect.FANFARE);
+    if (gameState.screen === Screen.RESULT && gameState.raceResult) {
+      soundPlayer.play(gameState.raceResult.playerWon ? SoundEffect.FANFARE : SoundEffect.FANFARE_LOSE);
+    }
   }, [gameState.screen, gameState.raceResult, soundPlayer]);
 
   useEffect(() => {
     SheepCountStorage.saveSheepCount(gameState.sheep);
   }, [gameState.sheep]);
 
+  const handleMuteToggle = () => {
+    soundPlayer.setMuted(!soundPlayer.isMuted());
+    setMuteTick((t) => t + 1);
+  };
+
   return (
     <>
+      <div style={{ position: "fixed", top: 8, right: 8, zIndex: 100 }}>
+        <MuteToggle player={soundPlayer} language={gameState.language} onToggle={handleMuteToggle} />
+      </div>
       {gameState.screen === Screen.TITLE && (
         <TitleScreen
           sheep={gameState.sheep}
@@ -72,12 +85,14 @@ export function App() {
 
       {gameState.screen === Screen.RACE && (
         <RaceScreen
+          key={muteTick}
           language={gameState.language}
           horses={gameState.horses}
           playerBetHorseId={gameState.playerBet?.horseIds[0] ?? null}
           weather={gameState.weather}
           raceCourse={gameState.raceCourse}
-          onRaceComplete={(finishOrder) => {
+          soundPlayer={soundPlayer}
+          onRaceComplete={(finishOrder, photoFinish) => {
             const bet = gameState.playerBet;
             const playerWon = bet ? isWinningBet(bet, finishOrder) : false;
             const payoutInfo = bet ? calculateBetPayoutInfo(bet, gameState.bots) : null;
@@ -90,6 +105,7 @@ export function App() {
               selectedHorsePopularityPercent: payoutInfo?.popularityPercent ?? null,
               selectedHorseProfitBonusPercent: payoutInfo?.profitBonusPercent ?? null,
               selectedHorsePayoutMultiplier: payoutInfo?.payoutMultiplier ?? null,
+              photoFinish,
             };
             setGameState((s) => ({ ...s, screen: Screen.RESULT, sheep: newSheep, raceResult: result, raceFinished: true }));
           }}

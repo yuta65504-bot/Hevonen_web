@@ -31,7 +31,11 @@ export function TitleScreen({ sheep, language, onLanguageChanged, onGainSheep, o
       <p style={{ fontSize: 18, fontWeight: 500 }}>{strings.ownedSheep(sheep)}</p>
 
       <div
+        role="button"
+        tabIndex={0}
+        aria-label={strings.tapAreaHint()}
         onClick={() => { setTaps((t) => t + 1); onGainSheep(); }}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setTaps((t) => t + 1); onGainSheep(); } }}
         style={{
           width: "100%",
           maxWidth: 420,

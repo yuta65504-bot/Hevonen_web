@@ -69,3 +69,16 @@ export function standbyHorsesFor(entrants: Horse[]): Horse[] {
   const entrantIds = new Set(entrants.map((h) => h.id));
   return ALL_HORSES.filter((h) => !entrantIds.has(h.id)).slice(0, STANDBY_HORSE_COUNT);
 }
+
+export type WeatherAffinityRank = "◎" | "○" | "△" | "×";
+
+export function weatherAffinityRank(biasValue: number): WeatherAffinityRank {
+  if (biasValue >= 1.1) return "◎";
+  if (biasValue >= 1.03) return "○";
+  if (biasValue >= 0.97) return "△";
+  return "×";
+}
+
+export function weatherAffinityForHorse(horse: Horse, weather: Weather): WeatherAffinityRank {
+  return weatherAffinityRank(weatherBiasMultiplier(horse.weatherBias, weather));
+}
